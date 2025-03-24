@@ -8,14 +8,17 @@ const hueRotate = document.getElementById("hue-rotate");
 const upload = document.getElementById("upload");
 const download = document.getElementById("download");
 const img = document.getElementById("img");
-const reset = document.querySelector("span");
+const reset = document.getElementById("reset");
+const undo = document.getElementById("undo");
 const imgBox = document.querySelector(".img-box");
 const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d");
 
+let filterHistory = [];
+
 window.onload = function () {
     imgBox.style.display = "none";
-}
+};
 
 upload.onchange = function () {
     let file = new FileReader();
@@ -23,23 +26,55 @@ upload.onchange = function () {
     file.onload = function () {
         img.src = file.result;
         imgBox.style.display = "block";
-    }
-}
+    };
+};
 
 let filters = document.querySelectorAll("ul li input");
 filters.forEach(filter => {
     filter.addEventListener('input', function () {
-        img.style.filter = `
-            saturate(${saturate.value}%)
-            contrast(${contrast.value}%)
-            brightness(${brightness.value}%)
-            sepia(${sepia.value}%)
-            grayscale(${grayscale.value})
-            blur(${blur.value}px)
-            hue-rotate(${hueRotate.value}deg)
-        `;
+        saveFilterState();
+        applyFilters();
     });
 });
+
+function applyFilters() {
+    img.style.filter = `
+        saturate(${saturate.value}%)
+        contrast(${contrast.value}%)
+        brightness(${brightness.value}%)
+        sepia(${sepia.value}%)
+        grayscale(${grayscale.value})
+        blur(${blur.value}px)
+        hue-rotate(${hueRotate.value}deg)
+    `;
+}
+
+function saveFilterState() {
+    filterHistory.push({
+        saturate: saturate.value,
+        contrast: contrast.value,
+        brightness: brightness.value,
+        sepia: sepia.value,
+        grayscale: grayscale.value,
+        blur: blur.value,
+        hueRotate: hueRotate.value
+    });
+}
+
+undo.onclick = function () {
+    if (filterHistory.length > 1) {
+        filterHistory.pop();
+        let lastState = filterHistory[filterHistory.length - 1];
+        saturate.value = lastState.saturate;
+        contrast.value = lastState.contrast;
+        brightness.value = lastState.brightness;
+        sepia.value = lastState.sepia;
+        grayscale.value = lastState.grayscale;
+        blur.value = lastState.blur;
+        hueRotate.value = lastState.hueRotate;
+        applyFilters();
+    }
+};
 
 reset.onclick = function () {
     saturate.value = "100";
@@ -49,8 +84,9 @@ reset.onclick = function () {
     grayscale.value = "0";
     blur.value = "0";
     hueRotate.value = "0";
-    img.style.filter = "none";
-}
+    applyFilters();
+    filterHistory = [];
+};
 
 download.onclick = function () {
     canvas.width = img.width;

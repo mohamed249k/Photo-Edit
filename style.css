@@ -1,65 +1,102 @@
-*{
+* {
     padding: 0;
     margin: 0;
     font-family: sans-serif;
+    box-sizing: border-box;
 }
+
 body {
     background: #333;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
 }
+
 .container {
     background: #222;
     width: 80vw;
-    
-    margin: auto;
     margin-top: 20px;
     padding: 20px;
     border-radius: 10px;
     display: grid;
     grid-template-columns: 5fr 3fr;
+    gap: 20px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
+
 .img {
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 20px;
     justify-content: center;
     align-items: center;
 }
+
 .img img {
-    max-width: 45vw;
+    max-width: 100%;
     max-height: 60vh;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
+
 .upload input {
     display: none;
 }
+
 .upload label {
     color: #fff;
-    padding: 8px 20px;
-    border: 2px #fff dashed;
+    padding: 10px 20px;
+    background: #007bff;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background 0.3s;
+    display: inline-block;
 }
-.filters ul , .filters ul li{
+
+.upload label:hover {
+    background: #0056b3;
+}
+
+.filters ul,
+.filters ul li {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 15px;
     direction: rtl;
 }
+
 .filters ul li label {
     color: #fff;
 }
-.filters ul li:last-child{
+
+.filters ul li:last-child {
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
 }
-.filters ul li a , span {
+
+.filters ul li a,
+button {
     color: #fff;
     padding: 10px 20px;
-    background: #060;
+    background: #007bff;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background 0.3s;
 }
-@media screen and (max-width :650px) {
-    .container{
+
+button:hover, .filters ul li a:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    transition: transform 0.2s ease-in-out;
+}
+
+@media screen and (max-width: 650px) {
+    .container {
         grid-template-columns: 1fr;
-        gap: 50px;
+        gap: 20px;
     }
-    
 }
